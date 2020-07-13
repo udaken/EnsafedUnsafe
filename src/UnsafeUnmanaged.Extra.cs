@@ -9,7 +9,7 @@ namespace EnsafedUnsafe
         [Conditional("DEBUG")]
         static unsafe void CheckAligned<T>(void* pointer) where T :unmanaged
         {
-            if (!IsAligned<T>(pointer))
+            if (!IsMaybeAligned<T>(pointer))
                 throw new DataMisalignedException($"{new IntPtr(pointer)}");
         }
 
@@ -60,7 +60,7 @@ namespace EnsafedUnsafe
 
             IntPtr diff = ByteOffsetReadOnly(outer, mid);
 
-            if ((uint)(diff) >= (uint)Unsafe.SizeOf<TOuter>())
+            if ((uint)(diff) >= UnsignedSizeOf<TOuter>())
             {
                 throw new ArgumentOutOfRangeException(nameof(member), $"given reference is not member of {nameof(TOuter)}");
             }
@@ -186,19 +186,19 @@ namespace EnsafedUnsafe
             => IsNullRef(ref Unsafe.AsRef(in source));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public unsafe static bool IsAligned<T>(void* source)
+        public unsafe static bool IsMaybeAligned<T>(void* source)
             where T : unmanaged
-            => (uint)source % Unsafe.SizeOf<T>() == 0;
+            => (uint)source % sizeof(double) == 0 || (uint)source % UnsignedSizeOf<T>() == 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public unsafe static bool IsAligned<T>(IntPtr source)
+        public unsafe static bool IsMaybeAligned<T>(IntPtr source)
             where T : unmanaged
-            => IsAligned<T>((void*)source);
+            => IsMaybeAligned<T>((void*)source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public unsafe static bool IsAligned<T>(ref byte source)
+        public unsafe static bool IsMaybeAligned<T>(ref byte source)
             where T : unmanaged
-            => IsAligned<T>(Unsafe.AsPointer(ref source));
+            => IsMaybeAligned<T>(Unsafe.AsPointer(ref source));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe static uint UnsignedSizeOf<T>()
