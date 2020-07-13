@@ -16,12 +16,25 @@ namespace EnsafedUnsafe
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe static IntPtr ByteOffset<T>(T* origin, T* target)
             where T : unmanaged
-            => Unsafe.ByteOffset(ref Unsafe.AsRef<T>(origin), ref Unsafe.AsRef<T>(target));
+        {
+            CheckAligned<T>(origin);
+            CheckAligned<T>(target);
+            return Unsafe.ByteOffset(ref Unsafe.AsRef<T>(origin), ref Unsafe.AsRef<T>(target));
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe static int ElementOffset<T>(T* origin, T* target)
             where T : unmanaged
-            => (int)((long)ByteOffset(origin, target) / Unsafe.SizeOf<T>());
+        {
+            CheckAligned<T>(origin);
+            CheckAligned<T>(target);
+            return (int)((long)ByteOffset(origin, target) / Unsafe.SizeOf<T>());
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe static int ElementOffset<T>(ref T origin, ref T target)
+            where T : unmanaged
+            => (int)((long)ByteOffset(ref origin, ref target) / Unsafe.SizeOf<T>());
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAddressGeq<T>(ref T left, ref T right)
@@ -141,7 +154,7 @@ namespace EnsafedUnsafe
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IntPtr ByteOffset<T>(ref T origin, ref T target)
             where T : unmanaged
-            => Unsafe.ByteOffset(ref target, ref origin);
+            => Unsafe.ByteOffset(ref origin, ref target);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool AreSame<T>(ref T left, ref T right)

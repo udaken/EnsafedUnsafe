@@ -1,10 +1,18 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace EnsafedUnsafe
 {
     public static partial class UnsafeUnmanaged
     {
+        [Conditional("DEBUG")]
+        static unsafe void CheckAligned<T>(void* pointer) where T :unmanaged
+        {
+            if (!IsAligned<T>(pointer))
+                throw new DataMisalignedException($"{new IntPtr(pointer)}");
+        }
+
         #region MoveBlock
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe static void MoveBlock(void* destination, void* source, uint byteCount)
@@ -37,7 +45,7 @@ namespace EnsafedUnsafe
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe static IntPtr ByteOffset(void* origin, void* target)
-            => ByteOffset((byte*)target, (byte*)origin);
+            => ByteOffset((byte*)origin, (byte*)target);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe static IntPtr ByteOffset(byte* origin, byte* target)
@@ -69,7 +77,7 @@ namespace EnsafedUnsafe
             if (originByteCount == default || targetByteCount == default)
                 return false;
 
-            IntPtr byteOffset = ByteOffset(target, origin);
+            IntPtr byteOffset = ByteOffset(origin, target);
 
             if (Unsafe.SizeOf<UIntPtr>() == sizeof(int))
             {
@@ -90,7 +98,8 @@ namespace EnsafedUnsafe
         public unsafe static bool Overlaps<T>(ref T source, int elementCount, ref T other, int otherElementCount)
             where T : unmanaged
         {
-            return Overlaps(Unsafe.AsPointer(ref source), (UIntPtr)((uint)otherElementCount * UnsignedSizeOf<T>()),
+            return Overlaps(
+                Unsafe.AsPointer(ref source), (UIntPtr)((uint)elementCount * UnsignedSizeOf<T>()),
                 Unsafe.AsPointer(ref other), (UIntPtr)((uint)otherElementCount * UnsignedSizeOf<T>()));
         }
 
@@ -160,6 +169,21 @@ namespace EnsafedUnsafe
         public unsafe static bool IsNullRef<T>(ref T source)
             where T : unmanaged
             => Unsafe.AsPointer(ref source) == null;
+
+        /// <summary>
+        /// Create a dangerous null reference.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe static ref readonly T NullRefReadOnly<T>()
+            where T : unmanaged
+            => ref NullRef<T>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe static bool IsNullRefReadOnly<T>(in T source)
+            where T : unmanaged
+            => IsNullRef(ref Unsafe.AsRef(in source));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe static bool IsAligned<T>(void* source)

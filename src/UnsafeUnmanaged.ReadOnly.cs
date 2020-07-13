@@ -10,21 +10,6 @@ namespace EnsafedUnsafe
             where T : unmanaged
             => ref AsReadOnly<T, byte>(in source);
 
-        /// <summary>
-        /// Create a dangerous null reference.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public unsafe static ref readonly T NullRefReadOnly<T>()
-            where T : unmanaged
-            => ref NullRef<T>();
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public unsafe static bool IsNullRefReadOnly<T>(in T source)
-            where T : unmanaged
-            => IsNullRef(ref Unsafe.AsRef(in source));
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe static int ElementOffsetReadOnly<T>(in T origin, in T target)
             where T : unmanaged
@@ -50,7 +35,10 @@ namespace EnsafedUnsafe
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe static void CopyReadOnly<T>(void* destination, in T source)
             where T : unmanaged
-            => Unsafe.Copy(destination, ref Unsafe.AsRef(in source));
+        {
+            CheckAligned<T>(destination);
+            Unsafe.Copy(destination, ref Unsafe.AsRef(in source));
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void CopyBlockReadOnly(ref byte destination, in byte source, uint byteCount)
