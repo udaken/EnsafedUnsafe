@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "test64": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
