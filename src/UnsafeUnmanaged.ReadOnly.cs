@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace EnsafedUnsafe
+namespace SafelyUnsafe
 {
     public static partial class UnsafeUnmanaged
     {

@@ -6,8 +6,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/udaken/EnsafedUnsafe</PackageProjectUrl>
-    <Description>EnsafedUnsafe provides System.Runtime.CompilerServices.Unsafe with a "little" more safety Wrapper Method. And also provides several support methods.
+    <PackageProjectUrl>https://github.com/udaken/SafelyUnsafe</PackageProjectUrl>
+    <Description>SafelyUnsafe provides System.Runtime.CompilerServices.Unsafe with a "little" more safety Wrapper Method. And also provides several support methods.
 
 • It is implemented in the UnsafeUnmanaged class. In most cases, you just replace Unsafe to UnsafeUnmanaged.
   All type argument is restricted to unmanaged

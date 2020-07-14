@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace EnsafedUnsafe
+namespace SafelyUnsafe
 {
     /// <summary>
     /// a restricted System.Runtime.CompilerServices.Unsafe class rapper for "unmanaged".

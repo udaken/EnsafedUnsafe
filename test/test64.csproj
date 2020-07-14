@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\EnsafedUnsafe.csproj" />
+    <ProjectReference Include="..\src\SafelyUnsafe.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
-# EnsafedUnsafe
+# SafelyUnsafe
 ## About
 
-EnsafedUnsafe provides `System.Runtime.CompilerServices.Unsafe` with a "little" more safety Wrapper Method.
+SafelyUnsafe provides `System.Runtime.CompilerServices.Unsafe` with a "little" more safety Wrapper Method.
 And also provides several support methods.
 
 - It is implemented in the `UnsafeUnmanaged` class.
@@ -16,7 +16,7 @@ And also provides several support methods.
 
 Design of `System.Runtime.CompilerServices.Unsafe`  is older than C# 7.3.
 
-There are no restrictions on type arguments of the `Unsafe` class, but all `EnsafedUnsafe` methods have restrictions.
+There are no restrictions on type arguments of the `Unsafe` class, but all `SafelyUnsafe` methods have restrictions.
 
 ## Overload for `ref readonly`
 

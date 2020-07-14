@@ -3,7 +3,7 @@ using Xunit;
 using Xunit.Extensions;
 using Xunit.Abstractions;
 
-using EnsafedUnsafe;
+using SafelyUnsafe;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 

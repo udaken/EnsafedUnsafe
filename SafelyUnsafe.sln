@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30218.91
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnsafedUnsafe", "src\EnsafedUnsafe.csproj", "{AFEBF68B-4AD7-4D60-ABA9-E950205847E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SafelyUnsafe", "src\SafelyUnsafe.csproj", "{AFEBF68B-4AD7-4D60-ABA9-E950205847E4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test64", "test\test64.csproj", "{C1087B1E-4741-4959-A886-25DCDB607B54}"
 	ProjectSection(ProjectDependencies) = postProject
