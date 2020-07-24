@@ -15,32 +15,37 @@ namespace SafelyUnsafe
 
         #region MoveBlock
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public unsafe static void MoveBlock(void* destination, void* source, uint byteCount)
-        {
-            // TODO  memmove
-            throw new NotImplementedException();
-        }
+        public unsafe static void MoveBlock(IntPtr destination, IntPtr source, ulong byteCount)
+            => Buffer.MemoryCopy(source.ToPointer(), destination.ToPointer(), byteCount, byteCount);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void MoveBlock(ref byte destination, ref byte source, uint byteCount)
-        {
-            // TODO  memmove
-            throw new NotImplementedException();
-        }
+        public unsafe static void MoveBlock<T>(T* destination, T* source, uint count)
+            where T : unmanaged
+            => Buffer.MemoryCopy(source, destination, count * sizeof(T) , count * sizeof(T));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public unsafe static void MoveBlockUnaligned(void* destination, void* source, uint byteCount)
-        {
-            // TODO  memmove
-            throw new NotImplementedException();
-        }
+        public unsafe static void MoveBlock(ref byte destination, in byte source, uint byteCount)
+            => Buffer.MemoryCopy(Unsafe.AsPointer(ref Unsafe.AsRef(in source)), Unsafe.AsPointer(ref destination), byteCount, byteCount);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void MoveBlockUnaligned(ref byte destination, ref byte source, uint byteCount)
-        {
-            // TODO  memmove
-            throw new NotImplementedException();
-        }
+        public unsafe static void MoveBlock<T>(ref T destination, in T source, uint count)
+            where T : unmanaged
+            => Buffer.MemoryCopy(Unsafe.AsPointer(ref Unsafe.AsRef(in source)), Unsafe.AsPointer(ref destination), count * sizeof(T), count * sizeof(T));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe static void MoveBlockUnaligned<T>(T* destination, T* source, uint count) 
+            where T : unmanaged
+            => Buffer.MemoryCopy(source, destination, count * sizeof(T), count * sizeof(T));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe static void MoveBlockUnaligned(ref byte destination, in byte source, uint byteCount)
+            => Buffer.MemoryCopy(Unsafe.AsPointer(ref Unsafe.AsRef(in source)), Unsafe.AsPointer(ref destination), byteCount, byteCount);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe static void MoveBlockUnaligned<T>(ref T destination, in T source, uint count)
+            where T : unmanaged
+            => Buffer.MemoryCopy(Unsafe.AsPointer(ref Unsafe.AsRef(in source)), Unsafe.AsPointer(ref destination), count * sizeof(T), count * sizeof(T));
+
         #endregion
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -97,11 +102,9 @@ namespace SafelyUnsafe
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe static bool Overlaps<T>(ref T source, int elementCount, ref T other, int otherElementCount)
             where T : unmanaged
-        {
-            return Overlaps(
+             => Overlaps(
                 Unsafe.AsPointer(ref source), (UIntPtr)((uint)elementCount * UnsignedSizeOf<T>()),
                 Unsafe.AsPointer(ref other), (UIntPtr)((uint)otherElementCount * UnsignedSizeOf<T>()));
-        }
 
         /// <summary>
         /// Determines whether two sequences overlap in memory and outputs the element offset.
